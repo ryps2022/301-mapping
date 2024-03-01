@@ -4,3 +4,4 @@ pandas
 pydeck
 streamlit
 sentence-transformers==2.5.1
+faiss-cpu
