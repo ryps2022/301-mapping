@@ -41,17 +41,51 @@ def perform_matching(origin_df, destination_df, selected_columns):
 def main():
     st.title('URL Redirect Similarity Matching App')
 
+    # Sidebar with step-by-step instructions
+    st.sidebar.title("URL Redirect Mapping Instructions")
+    st.sidebar.markdown("""
+    **Table of Contents:**
+    - [Step 1: Crawl your live website with Screaming Frog](#step-1-crawl-your-live-website-with-screaming-frog)
+    - [Step 2: Export HTML pages with 200 Status Code](#step-2-export-html-pages-with-200-status-code)
+    - [Step 3: Repeat steps 1 and 2 for your staging website](#step-3-repeat-steps-1-and-2-for-your-staging-website)
+    - [Optional: Find and replace your staging site domain](#optional-find-and-replace-your-staging-site-domain)
+    """)
+
+    # Detailed directions below the tool
+    st.header("Step-by-Step Instructions")
+    
+    # Step 1: Crawl your live website with Screaming Frog
+    st.subheader("Step 1: Crawl your live website with Screaming Frog")
+    st.markdown("""
+    You’ll need to perform a standard crawl on your website. Depending on how your website is built, this may or may not require a JavaScript crawl. The goal is to produce a list of as many accessible pages on your site as possible.
+    """)
+    # (Add more detailed instructions as needed)
+
+    # Step 2: Export HTML pages with 200 Status Code
+    st.subheader("Step 2: Export HTML pages with 200 Status Code")
+    st.markdown("""
+    Once the crawl has been completed, we want to export all of the found HTML URLs with a 200 Status Code. This will provide you with a list of our current live URLs and all of the default metadata Screaming Frog collects about them, such as Titles and Header Tags. Save this file as origin.csv.
+    """)
+    # (Add more detailed instructions as needed)
+
+    # Step 3: Repeat steps 1 and 2 for your staging website
+    st.subheader("Step 3: Repeat steps 1 and 2 for your staging website")
+    st.markdown("""
+    We now need to gather the same data from our staging website, so we have something to compare to. Depending on how your staging site is secured, you may need to use features such as Screaming Frog’s forms authentication if password protected. Once the crawl has completed, you should export the data and save this file as destination.csv.
+    """)
+    # (Add more detailed instructions as needed)
+
+    # Optional: Find and replace your staging site domain
+    st.subheader("Optional: Find and replace your staging site domain")
+    st.markdown("""
+    It’s likely your staging website is either on a different subdomain, TLD or even domain that won’t match our actual destination URL. For this reason, I will use a Find and Replace function on my destination.csv to change the path to match the final live site subdomain, domain or TLD.
+    """)
+    # (Add more detailed instructions as needed)
+
+    st.header("URL Redirect Similarity Matching Tool")
     st.markdown("""
     This app performs similarity matching between two sets of URLs for the purpose of URL redirection mapping. 
-    Please follow these instructions:
-    - **Upload Instructions**:
-        - The first CSV upload must be named **"origin.csv"**. This file should contain the URLs you want to redirect.
-        - The second CSV upload must be named **"destination.csv"**. This file contains the destination URLs where the origin URLs will be redirected to.
-    - **Matching Results**:
-        - The vector score represents the similarity between the origin and matched URLs. A higher score indicates a closer match.
-        - It is recommended to perform quality assurance (QA) on the matching results before implementing the redirection.
-    - **Output**:
-        - After matching is complete, a downloadable CSV file with the matching results will be provided.
+    Please follow the instructions provided on the sidebar to prepare your data for matching.
     """)
 
     origin_file = st.file_uploader("Upload origin.csv", type=['csv'], help="Please upload the CSV file containing the origin URLs")
@@ -77,8 +111,4 @@ def main():
                 # Save matches to a CSV file and provide download link
                 csv = matches_df.to_csv(index=False)
                 b64 = base64.b64encode(csv.encode()).decode()  # B64 encoding
-                href = f'<a href="data:file/csv;base64,{b64}" download="output.csv">Download CSV File</a>'
-                st.markdown(href, unsafe_allow_html=True)
-
-if __name__ == "__main__":
-    main()
+                href = f'<a href="data:file/csv;base64,{b64}"
