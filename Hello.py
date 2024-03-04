@@ -111,4 +111,4 @@ def main():
                 # Save matches to a CSV file and provide download link
                 csv = matches_df.to_csv(index=False)
                 b64 = base64.b64encode(csv.encode()).decode()  # B64 encoding
-                href = f'<a href="data:file/csv;base64,{b64}"
+                href = f'<a href="data:file/csv;base64,{b64}">'
