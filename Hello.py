@@ -45,11 +45,11 @@ def main():
     This app performs similarity matching between two sets of URLs for the purpose of URL redirection mapping. 
     Please follow these instructions:
 
-    ---    
+    ---
     """)
-    
+
     # Create a two-column layout
-    col1, col2 = st.beta_columns([2, 1])
+    col1, col2 = st.columns([2, 1])
 
     # Instructions in the left column
     with col1:
