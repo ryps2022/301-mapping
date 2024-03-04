@@ -41,51 +41,28 @@ def perform_matching(origin_df, destination_df, selected_columns):
 def main():
     st.title('URL Redirect Similarity Matching App')
 
-    # Sidebar with step-by-step instructions
-    st.sidebar.title("URL Redirect Mapping Instructions")
-    st.sidebar.markdown("""
-    **Table of Contents:**
-    - [Step 1: Crawl your live website with Screaming Frog](#step-1-crawl-your-live-website-with-screaming-frog)
-    - [Step 2: Export HTML pages with 200 Status Code](#step-2-export-html-pages-with-200-status-code)
-    - [Step 3: Repeat steps 1 and 2 for your staging website](#step-3-repeat-steps-1-and-2-for-your-staging-website)
-    - [Optional: Find and replace your staging site domain](#optional-find-and-replace-your-staging-site-domain)
-    """)
-
-    # Detailed directions below the tool
-    st.header("Step-by-Step Instructions")
-    
-    # Step 1: Crawl your live website with Screaming Frog
-    st.subheader("Step 1: Crawl your live website with Screaming Frog")
-    st.markdown("""
-    You’ll need to perform a standard crawl on your website. Depending on how your website is built, this may or may not require a JavaScript crawl. The goal is to produce a list of as many accessible pages on your site as possible.
-    """)
-    # (Add more detailed instructions as needed)
-
-    # Step 2: Export HTML pages with 200 Status Code
-    st.subheader("Step 2: Export HTML pages with 200 Status Code")
-    st.markdown("""
-    Once the crawl has been completed, we want to export all of the found HTML URLs with a 200 Status Code. This will provide you with a list of our current live URLs and all of the default metadata Screaming Frog collects about them, such as Titles and Header Tags. Save this file as origin.csv.
-    """)
-    # (Add more detailed instructions as needed)
-
-    # Step 3: Repeat steps 1 and 2 for your staging website
-    st.subheader("Step 3: Repeat steps 1 and 2 for your staging website")
-    st.markdown("""
-    We now need to gather the same data from our staging website, so we have something to compare to. Depending on how your staging site is secured, you may need to use features such as Screaming Frog’s forms authentication if password protected. Once the crawl has completed, you should export the data and save this file as destination.csv.
-    """)
-    # (Add more detailed instructions as needed)
-
-    # Optional: Find and replace your staging site domain
-    st.subheader("Optional: Find and replace your staging site domain")
-    st.markdown("""
-    It’s likely your staging website is either on a different subdomain, TLD or even domain that won’t match our actual destination URL. For this reason, I will use a Find and Replace function on my destination.csv to change the path to match the final live site subdomain, domain or TLD.
-    """)
-    # (Add more detailed instructions as needed)
-
-    st.header("URL Redirect Similarity Matching Tool")
     st.markdown("""
     This app performs similarity matching between two sets of URLs for the purpose of URL redirection mapping. 
-    Please follow the instructions provided on the sidebar to prepare your data for matching.
+    Please follow these instructions:
+    - **Step 1: Crawl your live website with Screaming Frog**
+    You’ll need to perform a standard crawl on your website. Depending on how your website is built, this may or may not require a JavaScript crawl. The goal is to produce a list of as many accessible pages on your site as possible.
+
+    - **Step 2: Export HTML pages with 200 Status Code**
+    Once the crawl has been completed, we want to export all of the found HTML URLs with a 200 Status Code. This will provide you with a list of our current live URLs and all of the default metadata Screaming Frog collects about them, such as Titles and Header Tags. Save this file as origin.csv.
+
+    - **Step 3: Repeat steps 1 and 2 for your staging website**
+    We now need to gather the same data from our staging website, so we have something to compare to.
+    Depending on how your staging site is secured, you may need to use features such as Screaming Frog’s forms authentication if password protected.
+    Once the crawl has completed, you should export the data and save this file as destination.csv.
+
+    - **Optional: Find and replace your staging site domain or subdomain to match your live site**
+    It’s likely your staging website is either on a different subdomain, TLD or even domain that won’t match our actual destination URL. For this reason, I will use a Find and Replace function on my destination.csv to change the path to match the final live site subdomain, domain or TLD.
+    For example:
+    The live website is https://examplesite.com/ (origin.csv)
+    The staging website is https://test.examplesite.dev/ (destination.csv)
+    The site is staying on the same domain; it’s just a redesign with different URLs, so I would open origin.csv and find any instance of https://examplesite.com/ and replace it with https://test.examplesite.dev/
+    Find and Replace in Excel
+    This also means when the redirect map is produced, the output is correct and only the final redirect logic needs to be written.
     """)
 
     origin_file = st.file_uploader("Upload origin.csv", type=['csv'], help="Please upload the CSV file containing the origin URLs")
@@ -111,4 +88,8 @@ def main():
                 # Save matches to a CSV file and provide download link
                 csv = matches_df.to_csv(index=False)
                 b64 = base64.b64encode(csv.encode()).decode()  # B64 encoding
-                href = f'<a href="data:file/csv;base64,{b64}">'
+                href = f'<a href="data:file/csv;base64,{b64}" download="output.csv">Download CSV File</a>'
+                st.markdown(href, unsafe_allow_html=True)
+
+if __name__ == "__main__":
+    main()
